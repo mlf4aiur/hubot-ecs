@@ -26,13 +26,13 @@ hubot-ecs can use [`hubot-auth`](https://github.com/hubot-scripts/hubot-auth) fo
 Usage
 -----
 
-* hubot ecs list-cluster - Lists all of the ECS clusters.
-* hubot ecs <cluster name> list-project - Lists all of the ECS projects in your cluster.
-* hubot ecs <cluster name> ps - Lists all of the running containers in default ECS cluster.
-* hubot ecs <cluster name> <project name> compose service ps - Lists all the containers in your cluster that belong to the service created with the compose project.
-* hubot ecs <cluster name> <project name> compose service up - Creates an ECS service from your compose file (if it does not already exist) and runs one instance of that task on your cluster (a combination of create and start). This command updates the desired count of the service to 1.
-* hubot ecs <cluster name> <project name> list-image - Lists all the images in your cluster that belong to the service created with the compose project.
-* hubot ecs <cluster name> <project name> update-image <new image> - Updates your compose file with the new image.
+    hubot ecs list-cluster - Lists all of the ECS clusters.
+    hubot ecs <cluster name> list-project - Lists all of the ECS projects in your cluster.
+    hubot ecs <cluster name> ps - Lists all of the running containers in default ECS cluster.
+    hubot ecs <cluster name> <project name> compose service ps - Lists all the containers in your cluster that belong to the service created with the compose project.
+    hubot ecs <cluster name> <project name> compose service up - Creates an ECS service from your compose file (if it does not already exist) and runs one instance of that task on your cluster (a combination of create and start). This command updates the desired count of the service to 1.
+    hubot ecs <cluster name> <project name> list-image - Lists all the images in your cluster that belong to the service created with the compose project.
+    hubot ecs <cluster name> <project name> update-image <new image> - Updates your compose file with the new image.
 
 Example
 -------
@@ -59,7 +59,7 @@ Running hubot-ecs on Docker
     export HUBOT_AUTH_ADMIN=slack_user_id_1,slack_user_id_2
     export HUBOT_SLACK_TOKEN=slack_token
     export HUBOT_ECS_AUTHORIZED_ROLES=admin,ecs_admin
-    export HUBOT_ECS_CLUSTER_PATH=/root/mybot/ecs
+    export HUBOT_ECS_CLUSTER_PATH=/root/mybot/ecs_cluster
 
     docker rm -f redis_hubot_ecs &>/dev/null
     docker run \
@@ -80,7 +80,7 @@ Running hubot-ecs on Docker
         -e "HUBOT_SLACK_TOKEN=${HUBOT_SLACK_TOKEN}" \
         -e "HUBOT_ECS_AUTHORIZED_ROLES=${HUBOT_ECS_AUTHORIZED_ROLES}" \
         -e "HUBOT_ECS_CLUSTER_PATH=${HUBOT_ECS_CLUSTER_PATH}" \
-        -v "${HOME}/.ecs/cluster":/root/mybot/ecs:rw \
+        -v "${HOME}/.ecs/cluster":/root/mybot/ecs_cluster:rw \
         -v "${HOME}/.ecs/config":/root/.ecs/config:ro \
         --link redis_hubot_ecs:redis \
         mlf4aiur/hubot-ecs

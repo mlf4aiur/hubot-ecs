@@ -23,7 +23,7 @@
 fs = require("fs")
 path = require 'path'
 
-defaultECSClusterPath = path.join __dirname, '..', 'ecs'
+defaultECSClusterPath = path.join __dirname, '..', 'ecs_cluster'
 
 if process.env.HUBOT_ECS_AUTHORIZED_ROLES
   authorizedRoles = process.env.HUBOT_ECS_AUTHORIZED_ROLES
