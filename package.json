@@ -1,6 +1,6 @@
 {
-  "name": "hubot-ecs",
-  "version": "1.0.0",
+  "name": "hubot-ecs-cli",
+  "version": "1.0.1",
   "description": "A hubot script for manage AWS ECS cluster by ecs-cli.",
   "main": "index.coffee",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mlf4aiur/hubot-ecs"
+    "url": "https://github.com/mlf4aiur/hubot-ecs-cli"
   },
   "keywords": [
     "ecs",
@@ -17,7 +17,7 @@
   "author": "Kevin Li",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/mlf4aiur/hubot-ecs/issues"
+    "url": "https://github.com/mlf4aiur/hubot-ecs-cli/issues"
   },
-  "homepage": "https://github.com/mlf4aiur/hubot-ecs#readme"
+  "homepage": "https://github.com/mlf4aiur/hubot-ecs-cli#readme"
 }

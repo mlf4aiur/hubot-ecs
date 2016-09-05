@@ -39,9 +39,9 @@ RUN \
         --description="hubot" \
         --adapter="slack" \
     && npm install --save \
-        hubot-ecs \
+        hubot-ecs-cli \
         aws-sdk \
-    && sed -i '1a\  "hubot-ecs",' /root/mybot/external-scripts.json \
+    && sed -i '1a\  "hubot-ecs-cli",' /root/mybot/external-scripts.json \
     && find /usr/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf \
     && rm -rf /tmp/* \
         /usr/lib/node_modules/npm/man \

@@ -1,27 +1,29 @@
-hubot-ecs
-=========
+hubot-ecs-cli
+=============
 
-A hubot script for manage AWS ECS cluster via ecs-cli.
+[![](https://images.microbadger.com/badges/image/mlf4aiur/hubot-ecs-cli.svg)](https://microbadger.com/images/mlf4aiur/hubot-ecs-cli "Get your own image badge on microbadger.com")
+
+A hubot script for manage AWS ECS cluster via [ecs-cli](https://github.com/aws/amazon-ecs-cli).
 
 Installation
 ------------
 
 In hubot project repo, run:
 
-    npm install hubot-ecs --save
+    npm install hubot-ecs-cli --save
 
-Then add **hubot-ecs** to your `external-scripts.json`:
+Then add **hubot-ecs-cli** to your `external-scripts.json`:
 
 ```json
 [
-  "hubot-ecs"
+  "hubot-ecs-cli"
 ]
 ```
 
 Configuration
 -------------
 
-hubot-ecs can use [`hubot-auth`](https://github.com/hubot-scripts/hubot-auth) for restrict usage to certain roles.
+hubot-ecs-cli can use [`hubot-auth`](https://github.com/hubot-scripts/hubot-auth) for restrict usage to certain roles.
 
 Usage
 -----
@@ -51,10 +53,10 @@ Example
 Configuration
 -------------
 
-The ECS cluster default path is `hubot_dir/node_modules/hubot-ecs/src/ecs/`, you can override this path by set environment variable `HUBOT_ECS_CLUSTER_PATH`, and use cluster name as the directory name, then put your [Docker Compose](https://docs.docker.com/compose/) file into `HUBOT_ECS_CLUSTER_PATH/<cluster-name>`, Docker compose name as the ECS project name, the default authorized roles are `admin` and `ecs_admin`, and you can use environment variable `HUBOT_ECS_AUTHORIZED_ROLES` to override it.
+The ECS cluster default path is `hubot_dir/node_modules/hubot-ecs-cli/src/ecs/`, you can override this path by set environment variable `HUBOT_ECS_CLUSTER_PATH`, and use cluster name as the directory name, then put your [Docker Compose](https://docs.docker.com/compose/) file into `HUBOT_ECS_CLUSTER_PATH/<cluster-name>`, Docker compose name as the ECS project name, the default authorized roles are `admin` and `ecs_admin`, and you can use environment variable `HUBOT_ECS_AUTHORIZED_ROLES` to override it.
 
-Running hubot-ecs on Docker
----------------------------
+Running hubot-ecs-cli on Docker
+-------------------------------
 
     export HUBOT_AUTH_ADMIN=slack_user_id_1,slack_user_id_2
     export HUBOT_SLACK_TOKEN=slack_token
@@ -83,9 +85,9 @@ Running hubot-ecs on Docker
         -v "${HOME}/.ecs/cluster":/root/mybot/ecs_cluster:rw \
         -v "${HOME}/.ecs/config":/root/.ecs/config:ro \
         --link redis_hubot_ecs:redis \
-        mlf4aiur/hubot-ecs
+        mlf4aiur/hubot-ecs-cli
 
 License
 -------
 
-This project is [BSD-3-Clause Licensed](https://github.com/mlf4aiur/hubot-ecs/master/LICENSE).
+This project is [BSD-3-Clause Licensed](https://github.com/mlf4aiur/hubot-ecs-cli/master/LICENSE).
