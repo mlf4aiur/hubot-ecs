@@ -1,0 +1,109 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/Cellar/node/6.4.0/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.3
+3 info using node@v6.4.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/dfli/Documents/workspace/Kevin/hubot-ecs-cli',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/dfli/.npm/hubot-ecs-cli/1.0.1/package.tgz not in flight; packing
+9 verbose correctMkdir /Users/dfli/.npm correctMkdir not in flight; initializing
+10 info lifecycle hubot-ecs-cli@1.0.1~prepublish: hubot-ecs-cli@1.0.1
+11 silly lifecycle hubot-ecs-cli@1.0.1~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/Users/dfli/.npm/hubot-ecs-cli/1.0.1/package.tgz',
+12 verbose tar pack   '/Users/dfli/Documents/workspace/Kevin/hubot-ecs-cli' ]
+13 verbose tarball /Users/dfli/.npm/hubot-ecs-cli/1.0.1/package.tgz
+14 verbose folder /Users/dfli/Documents/workspace/Kevin/hubot-ecs-cli
+15 verbose addLocalTarball adding from inside cache /Users/dfli/.npm/hubot-ecs-cli/1.0.1/package.tgz
+16 verbose correctMkdir /Users/dfli/.npm correctMkdir not in flight; initializing
+17 silly cache afterAdd hubot-ecs-cli@1.0.1
+18 verbose afterAdd /Users/dfli/.npm/hubot-ecs-cli/1.0.1/package/package.json not in flight; writing
+19 verbose correctMkdir /Users/dfli/.npm correctMkdir not in flight; initializing
+20 verbose afterAdd /Users/dfli/.npm/hubot-ecs-cli/1.0.1/package/package.json written
+21 silly publish { name: 'hubot-ecs-cli',
+21 silly publish   version: '1.0.1',
+21 silly publish   description: 'A hubot script for manage AWS ECS cluster by ecs-cli.',
+21 silly publish   main: 'index.coffee',
+21 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+21 silly publish   repository:
+21 silly publish    { type: 'git',
+21 silly publish      url: 'git+https://github.com/mlf4aiur/hubot-ecs-cli.git' },
+21 silly publish   keywords: [ 'ecs', 'hubot' ],
+21 silly publish   author: { name: 'Kevin Li' },
+21 silly publish   license: 'BSD-3-Clause',
+21 silly publish   bugs: { url: 'https://github.com/mlf4aiur/hubot-ecs-cli/issues' },
+21 silly publish   homepage: 'https://github.com/mlf4aiur/hubot-ecs-cli#readme',
+21 silly publish   readme: 'hubot-ecs-cli\n=============\n\n[![](https://images.microbadger.com/badges/image/mlf4aiur/hubot-ecs-cli.svg)](https://microbadger.com/images/mlf4aiur/hubot-ecs-cli "Get your own image badge on microbadger.com")\n\nA hubot script for manage AWS ECS cluster via [ecs-cli](https://github.com/aws/amazon-ecs-cli).\n\nInstallation\n------------\n\nIn hubot project repo, run:\n\n    npm install hubot-ecs-cli --save\n\nThen add **hubot-ecs-cli** to your `external-scripts.json`:\n\n```json\n[\n  "hubot-ecs-cli"\n]\n```\n\nConfiguration\n-------------\n\nhubot-ecs-cli can use [`hubot-auth`](https://github.com/hubot-scripts/hubot-auth) for restrict usage to certain roles.\n\nUsage\n-----\n\n    hubot ecs list-cluster - Lists all of the ECS clusters.\n    hubot ecs <cluster name> list-project - Lists all of the ECS projects in your cluster.\n    hubot ecs <cluster name> ps - Lists all of the running containers in default ECS cluster.\n    hubot ecs <cluster name> <project name> compose service ps - Lists all the containers in your cluster that belong to the service created with the compose project.\n    hubot ecs <cluster name> <project name> compose service up - Creates an ECS service from your compose file (if it does not already exist) and runs one instance of that task on your cluster (a combination of create and start). This command updates the desired count of the service to 1.\n    hubot ecs <cluster name> <project name> list-image - Lists all the images in your cluster that belong to the service created with the compose project.\n    hubot ecs <cluster name> <project name> update-image <new image> - Updates your compose file with the new image.\n\nExample\n-------\n\n    hubot> @hubot ecs list-cluster\n\n    hubot> Clusters:\n    hubot>   default\n\n    hubot> @hubot ecs default list-project\n    hubot>   example\n\n    hubot> @hubot @user has default_admin role\n    hubot>   OK, user has the \'default_admin\' role.\n\nConfiguration\n-------------\n\nThe ECS cluster default path is `hubot_dir/node_modules/hubot-ecs-cli/src/ecs/`, you can override this path by set environment variable `HUBOT_ECS_CLUSTER_PATH`, and use cluster name as the directory name, then put your [Docker Compose](https://docs.docker.com/compose/) file into `HUBOT_ECS_CLUSTER_PATH/<cluster-name>`, Docker compose name as the ECS project name, the default authorized roles are `admin` and `ecs_admin`, and you can use environment variable `HUBOT_ECS_AUTHORIZED_ROLES` to override it.\n\nRunning hubot-ecs-cli on Docker\n-------------------------------\n\n    export HUBOT_AUTH_ADMIN=slack_user_id_1,slack_user_id_2\n    export HUBOT_SLACK_TOKEN=slack_token\n    export HUBOT_ECS_AUTHORIZED_ROLES=admin,ecs_admin\n    export HUBOT_ECS_CLUSTER_PATH=/root/mybot/ecs_cluster\n\n    docker rm -f redis_hubot_ecs &>/dev/null\n    docker run \\\n        -d \\\n        --name redis_hubot_ecs \\\n        --restart=unless-stopped \\\n        -v "$(pwd)/data":/data:rw \\\n        redis:3.2.0-alpine \\\n        redis-server --appendonly yes\n\n    docker rm -f hubot_ecs &>/dev/null\n    docker run \\\n        -d \\\n        --name=hubot_ecs \\\n        --restart=unless-stopped \\\n        -e "HUBOT_AUTH_ADMIN=${HUBOT_AUTH_ADMIN}" \\\n        -e "REDIS_PORT=tcp://redis:6379" \\\n        -e "HUBOT_SLACK_TOKEN=${HUBOT_SLACK_TOKEN}" \\\n        -e "HUBOT_ECS_AUTHORIZED_ROLES=${HUBOT_ECS_AUTHORIZED_ROLES}" \\\n        -e "HUBOT_ECS_CLUSTER_PATH=${HUBOT_ECS_CLUSTER_PATH}" \\\n        -v "${HOME}/.ecs/cluster":/root/mybot/ecs_cluster:rw \\\n        -v "${HOME}/.ecs/config":/root/.ecs/config:ro \\\n        --link redis_hubot_ecs:redis \\\n        mlf4aiur/hubot-ecs-cli\n\nLicense\n-------\n\nThis project is [BSD-3-Clause Licensed](https://github.com/mlf4aiur/hubot-ecs-cli/master/LICENSE).\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: '6c347d7b9225abd5999503cdf7788506bcb470d2',
+21 silly publish   _id: 'hubot-ecs-cli@1.0.1',
+21 silly publish   _shasum: '973d0dd3e78063e49b0fea856275504a960c696e',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name hubot-ecs-cli
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'hubot-ecs-cli',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'hubot-ecs-cli',
+26 silly mapToRegistry   name: 'hubot-ecs-cli',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/hubot-ecs-cli
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading /Users/dfli/.npm/hubot-ecs-cli/1.0.1/package.tgz
+30 verbose request uri https://registry.npmjs.org/hubot-ecs-cli
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 2:56:54 PM
+33 verbose request using bearer token for auth
+34 verbose request id a9f4e7bb9c3fd5c0
+35 http request PUT https://registry.npmjs.org/hubot-ecs-cli
+36 http 403 https://registry.npmjs.org/hubot-ecs-cli
+37 verbose headers { 'content-type': 'application/json',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   'content-length': '95',
+37 verbose headers   'accept-ranges': 'bytes',
+37 verbose headers   date: 'Mon, 05 Sep 2016 06:56:58 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-sjc3130-SJC',
+37 verbose headers   'x-cache': 'MISS',
+37 verbose headers   'x-cache-hits': '0',
+37 verbose headers   'x-timer': 'S1473058618.014599,VS0,VE151',
+37 verbose headers   vary: 'Accept-Encoding' }
+38 verbose request invalidating /Users/dfli/.npm/registry.npmjs.org/hubot-ecs-cli on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: "You cannot publish over the previously published version 1.0.1." : hubot-ecs-cli
+40 verbose stack     at makeError (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+40 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+40 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:200:22)
+40 verbose stack     at emitTwo (events.js:106:13)
+40 verbose stack     at Request.emit (events.js:191:7)
+40 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1067:10)
+40 verbose stack     at emitOne (events.js:101:20)
+40 verbose stack     at Request.emit (events.js:188:7)
+40 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:988:12)
+41 verbose statusCode 403
+42 verbose pkgid hubot-ecs-cli
+43 verbose cwd /Users/dfli/Documents/workspace/Kevin/hubot-ecs-cli
+44 error Darwin 14.5.0
+45 error argv "/usr/local/Cellar/node/6.4.0/bin/node" "/usr/local/bin/npm" "publish"
+46 error node v6.4.0
+47 error npm  v3.10.3
+48 error code E403
+49 error "You cannot publish over the previously published version 1.0.1." : hubot-ecs-cli
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
