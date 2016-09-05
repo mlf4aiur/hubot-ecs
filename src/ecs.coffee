@@ -9,13 +9,13 @@
 #   HUBOT_ECS_CLUSTER_PATH - The directory to put your ECS cluster Docker compose file
 #
 # Commands:
-#  hubot ecs list-cluster - Lists all of the ECS clusters.
-#  hubot ecs <cluster name> list-project - Lists all of the ECS projects in your cluster.
-#  hubot ecs <cluster name> ps - Lists all of the running containers in default ECS cluster.
-#  hubot ecs <cluster name> <project name> compose service ps - Lists all the containers in your cluster that belong to the service created with the compose project.
-#  hubot ecs <cluster name> <project name> compose service up - Creates an ECS service from your compose file (if it does not already exist) and runs one instance of that task on your cluster (a combination of create and start). This command updates the desired count of the service to 1.
-#  hubot ecs <cluster name> <project name> list-image - Lists all the images in your cluster that belong to the service created with the compose project.
-#  hubot ecs <cluster name> <project name> update-image <new image> - Updates your compose file with the new image.
+#  hubot ecs-cli list-cluster - Lists all of the ECS clusters.
+#  hubot ecs-cli <cluster name> list-project - Lists all of the ECS projects in your cluster.
+#  hubot ecs-cli <cluster name> ps - Lists all of the running containers in default ECS cluster.
+#  hubot ecs-cli <cluster name> <project name> compose service ps - Lists all the containers in your cluster that belong to the service created with the compose project.
+#  hubot ecs-cli <cluster name> <project name> compose service up - Creates an ECS service from your compose file (if it does not already exist) and runs one instance of that task on your cluster (a combination of create and start). This command updates the desired count of the service to 1.
+#  hubot ecs-cli <cluster name> <project name> list-image - Lists all the images in your cluster that belong to the service created with the compose project.
+#  hubot ecs-cli <cluster name> <project name> update-image <new image> - Updates your compose file with the new image.
 #
 # Author:
 #   Kevin Li
@@ -84,9 +84,9 @@ runECSCompose = (robot, cluster, project, command, res) ->
   shell = require('shelljs')
   projectPath = path.join hubotECSClusterPath, cluster, project
   composeFile = "#{projectPath}.yml"
-  ecs = "ecs-cli compose --file #{composeFile} --project-name #{project} #{command}"
-  console.log ecs
-  shell.exec ecs, {async:true}, (code, stdout, stderr) ->
+  ecsCli = "ecs-cli compose --file #{composeFile} --project-name #{project} #{command}"
+  console.log ecsCli
+  shell.exec ecsCli, {async:true}, (code, stdout, stderr) ->
     displayResult robot, res, cluster, project, "compose #{command}", stdout
 
 listImage = (robot, cluster, project, res) ->
@@ -150,22 +150,22 @@ updateImage = (robot, cluster, project, useImage, imageWithoutTag, res) ->
     else
       newContent.push line
   fs.writeFileSync composeFile, newContent.join '\n'
-  console.log "ecs update-image: User: #{res.message.user.name}, Cluster: #{cluster}, Project: #{project}, Result: #{text}"
+  console.log "ecs-cli update-image: User: #{res.message.user.name}, Cluster: #{cluster}, Project: #{project}, Result: #{text}"
   displayResult robot, res, cluster, project, "update-image", text
 
 module.exports = (robot) ->
-  #  hubot ecs list-cluster
-  robot.respond /ecs\s+list-cluster/i, (res) ->
+  #  hubot ecs-cli list-cluster
+  robot.respond /ecs-cli\s+list-cluster/i, (res) ->
     clusters = getClusters hubotECSClusterPath
-    console.log "ecs list-cluster: User: #{res.message.user.name}"
+    console.log "ecs-cli list-cluster: User: #{res.message.user.name}"
     res.reply "Clusters:\n#{clusters.join('\n')}"
 
-  #  hubot ecs <cluster name> list-project
-  robot.respond /ecs\s+([^\s]+)\s+list-project/i, (res) ->
+  #  hubot ecs-cli <cluster name> list-project
+  robot.respond /ecs-cli\s+([^\s]+)\s+list-project/i, (res) ->
     cluster = res.match[1].trim() || 'default'
     clusterPath = path.join hubotECSClusterPath, cluster
     authorized = isAuthorized robot, res.envelope.user, cluster, res
-    console.log "ecs list-project: User: #{res.message.user.name}, Cluster: #{cluster}, Cluster path: #{clusterPath}"
+    console.log "ecs-cli list-project: User: #{res.message.user.name}, Cluster: #{cluster}, Cluster path: #{clusterPath}"
 
     if authorized
       if fs.existsSync clusterPath
@@ -176,33 +176,33 @@ module.exports = (robot) ->
     else
       res.reply "I can't do that, you need at least one of these roles: #{authorizedRoles},#{cluster}_admin"
 
-  #  hubot ecs <cluster name> <project name> compose <sub command>
-  robot.respond /ecs\s+([^\s]+)\s+([^\s]+)\s+compose\s+(.+)/i, (res) ->
+  #  hubot ecs-cli <cluster name> <project name> compose <sub command>
+  robot.respond /ecs-cli\s+([^\s]+)\s+([^\s]+)\s+compose\s+(.+)/i, (res) ->
     cluster = res.match[1].trim() || 'default'
     project = res.match[2].trim() || 'default'
     command = res.match[3].trim() || '--help'
     authorized = isAuthorized robot, res.envelope.user, cluster, res
-    console.log "ecs compose: User: #{res.message.user.name}, Cluster: #{cluster}, Project: #{project}, Command: #{command}"
+    console.log "ecs-cli compose: User: #{res.message.user.name}, Cluster: #{cluster}, Project: #{project}, Command: #{command}"
 
     if authorized
       runECSCompose robot, cluster, project, command, res
     else
       res.reply "I can't do that, you need at least one of these roles: #{authorizedRoles},#{cluster}_admin"
 
-  #  hubot ecs <cluster name> <project name> list-image
-  robot.respond /ecs\s+([^\s]+)\s+([^\s]+)\s+list-image/i, (res) ->
+  #  hubot ecs-cli <cluster name> <project name> list-image
+  robot.respond /ecs-cli\s+([^\s]+)\s+([^\s]+)\s+list-image/i, (res) ->
     cluster = res.match[1].trim() || 'default'
     project = res.match[2].trim() || 'default'
     authorized = isAuthorized robot, res.envelope.user, cluster, res
-    console.log "ecs list-image User: #{res.message.user.name}, Cluster: #{cluster}, Project: #{project}, Command: list-image"
+    console.log "ecs-cli list-image User: #{res.message.user.name}, Cluster: #{cluster}, Project: #{project}, Command: list-image"
 
     if authorized
       listImage robot, cluster, project, res
     else
       res.reply "I can't do that, you need at least one of these roles: #{authorizedRoles},#{cluster}_admin"
 
-  #  hubot ecs <cluster name> <project name> update-image <new image>
-  robot.respond /ecs\s+([^\s]+)\s+([^\s]+)\s+update-image\s+([^\s]+)/i, (res) ->
+  #  hubot ecs-cli <cluster name> <project name> update-image <new image>
+  robot.respond /ecs-cli\s+([^\s]+)\s+([^\s]+)\s+update-image\s+([^\s]+)/i, (res) ->
     cluster = res.match[1].trim() || 'default'
     project = res.match[2].trim() || 'default'
     image = res.match[3].trim() || '--help'
@@ -211,7 +211,7 @@ module.exports = (robot) ->
     if image.startsWith 'https://'
       image = image.slice 8
     authorized = isAuthorized robot, res.envelope.user, cluster, res
-    console.log "ecs update-image User: #{res.message.user.name}, Cluster: #{cluster}, Project: #{project}, Command: update-image, image: #{image}"
+    console.log "ecs-cli update-image User: #{res.message.user.name}, Cluster: #{cluster}, Project: #{project}, Command: update-image, image: #{image}"
 
     if authorized
       [useImage, imageWithoutTag] = parseImage image
